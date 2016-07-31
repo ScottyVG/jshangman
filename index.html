@@ -3,11 +3,84 @@
   <head>
     <meta charset="utf-8">
     <title>Hangman Game</title>
-    <script type="text/javascript" src="main.js">
-
-    </script>
   </head>
   <body>
-    <h2>Play some hangman man!</h2>
+    <h1>Play some hangman man!</h1>
+
+    <script type="text/javascript">
+
+    // Array of words
+    var words = ["javascript", "monkey", "amazing", "pancake", "heirloom", "poutine", "thundercats", "foodtruck", "mustache", "organic", "kale", "brunch", "banjo", "vegan", "skatepark", "trustfund", "flannel"];
+    var answerArray = [];
+    var guessesArray = [];
+    var guess = "";
+    var remainingLetters = 0;
+
+    //function calls
+    var word = pickWord();
+    var answerArray = setupAnswerArray(word);
+    var remainingLetters = word.length;
+
+    while(remainingLetters > 0) {
+      showPlayerProgress(answerArray);
+      var guess = getGuess();
+      if (guess === null) {
+        break;
+      } else if (guess.length !==1) {
+        alert('Please enter a single letter.');
+      } else {
+        updateGameState(guess, word, answerArray);
+      };
+    };
+
+    showAnswerAndCongratulatePlayer(remainingLetters);
+
+    // Picking a randow word from the Array
+    function pickWord() {
+      var word = words[Math.floor(Math.random() * words.length)];
+      return word;
+    };
+
+    // Setup Answer Array
+    function setupAnswerArray(word) {
+      var answerArray = [];
+      for (var i=0; i<word.length; i++){
+        answerArray[i]='_';
+      };
+      remainingLetters = word.length;
+      return answerArray;
+    };
+
+    // Show player status
+    function showPlayerProgress(answerArray) {
+      alert(answerArray.join(' ')+"\n\nYou have already guessed the letters\n' "+guessesArray.join(" ")+" '.");
+      return;
+    };
+
+    // Get a guess from the player
+    function getGuess() {
+      guess = prompt("Guess a letter or click Cancel to stop playing. You have already guessed:\n\n"+guessesArray.join(" ")).toLowerCase();
+      return guess;
+    };
+
+    // Update the game state with the guess
+    function updateGameState(guess, word, answerArray) {
+      guessesArray.push(guess);
+      for (var j = 0; j < word.length; j++) {
+        if (word[j] === guess) {
+          answerArray[j] = guess;
+          remainingLetters--;
+        }
+      }
+      return remainingLetters;
+    };
+
+    // Show the answer and congratulate the player
+    function showAnswerAndCongratulatePlayer(remainingLetters) {
+      if (remainingLetters==0) {
+        alert('Good job! The answer was ' + word);
+      }
+    };
+    </script>
   </body>
 </html>
